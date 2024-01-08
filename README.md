@@ -22,7 +22,7 @@ As of now, this project piggybacks on [Pavel Demin's SDR Transceiver bitfile](ht
 * Navigate to the root folder of your local copy and run `pip install .`
   
 # Usage
-```
+```python
 from pyrpiqa import RPIQA
 
 rpiqa = RPIQA("your Red Pitaya IP address", 1) # This can take a few seconds, 1 means IN1; use 2 for IN2
