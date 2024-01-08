@@ -7,16 +7,6 @@ import time
 
 PACKAGE_ROOT = os.path.dirname(__file__)
 
-def print_C_sources():
-    print(__file__)
-    files_to_move = ["acquire.c", "configure.c", "Makefile"]
-
-    for filename in files_to_move:
-        print(f"{filename}:" + "~"*12)
-        with open(os.path.join(PACKAGE_ROOT, "rp_src", filename), "r") as f:
-            print(f.read(-1))
-        print("~"*12)
-
 class RPIQA:
     """
     API to configure system and acquire data.

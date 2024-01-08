@@ -9,7 +9,7 @@ It should be run everytime changes are made to the acquire.c and configure.c fil
 import paramiko
 import os
 
-rp_address = "RP-f09013.local"
+rp_address = ""
 username = "root"
 password = "changeme"
 
