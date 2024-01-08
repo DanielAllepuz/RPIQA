@@ -31,3 +31,6 @@ rpiqa.set_modulation_frequency(1.001e6) # Set the demodulation frequency 1kHz aw
 rpiqa.set_sample_rate(rpiqa.SAMPLE_RATE_100KSPS) # Set the sample rate to 100kHz
 t, I, Q = rpiqa.acquire(2.5) # Acquire 2.5 seconds of data
 ```
+
+# Know issues
+* When the Red Pitaya is rebooted, Pavel's Linux distribution generates new ssh keys. The program will not run and complain with `ValueError: ('Invalid private key',...`. A quick-fix when using Windows is to delete the stored keys found in `C:\Users\(your user name)\.shh`
