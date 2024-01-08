@@ -12,5 +12,5 @@ As of now, this project piggy-backs on [Pavel Demin's SDR Transceiver bitfile](h
 * Follow [Pavel's instructions](https://pavel-demin.github.io/red-pitaya-notes/alpine/) to install his custom Linux distribution on the Red Pitaya. 
 * Install the required Python modules using `pip install numpy paramiko`. The software has been tested using Python 3.7.12. It should work with newer versions of Python.
 * Download this repository by either cloning it `git clone https://github.com/DanielAllepuz/RPIQA.git` or [downloading the repository as a ZIP file](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives).
-* Navigate to the your local copy's root folder and run `pip install .`
+* Navigate to the root folder of your local copy and run `pip install .`
   
