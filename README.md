@@ -16,7 +16,7 @@ Use a [Red Pitaya FPGA board](https://redpitaya.com/) to acquire long, continuou
 As of now, this project piggybacks on [Pavel Demin's SDR Transceiver bitfile](https://pavel-demin.github.io/red-pitaya-notes/sdr-transceiver/). Instead of running Pavel's software, which streams data over the network, the software provided in this project stores it in RAM, ensuring continuous acquisition. In the future, a custom bitfile will be provided.
 
 # Installation
-* Follow [Pavel's instructions](https://pavel-demin.github.io/red-pitaya-notes/alpine/) to install his custom Linux distribution on the Red Pitaya. 
+* Follow [Pavel's instructions](https://pavel-demin.github.io/red-pitaya-notes/alpine/) to install a custom Linux distribution on the Red Pitaya. 
 * Install the required Python modules using `pip install numpy paramiko`. The software has been tested using Python 3.7.12. It should work with newer versions of Python.
 * Download this repository by either cloning it `git clone https://github.com/DanielAllepuz/RPIQA.git` or [downloading the repository as a ZIP file](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives).
 * Navigate to the root folder of your local copy and run `pip install .`
