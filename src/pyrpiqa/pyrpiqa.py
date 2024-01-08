@@ -33,14 +33,20 @@ class RPIQA:
     RAM_DISK_PATH = "/mnt/RPIQA"
 
 
-    def __init__(self, rp_address: str, username: str = "root", password: str = "changeme", verbose: bool = False, sleep_function=time.sleep):
+    def __init__(self, rp_address: str, input_channel: int, username: str = "root", password: str = "changeme", verbose: bool = False, sleep_function=time.sleep):
         """
         :param rp_address: IP address of the Red Pitaya, can be *.*.*.* or RP-******.local
+        :param input_channel: Input channel from which to acquire data. Either 1 or 2.
         :param username: User name to use to connect, default is "root".
         :param password: Password of the user, default is "changeme"
         :param verbose: if True, details about the init process will be printed. Default is False
         :param sleep_function: custom function to block execution. Default is Python's time.sleep
         """
+        if (int(input_channel) == 1 or int(input_channel) == 2):
+            self.input_channel = input_channel
+        else:
+            raise RuntimeError("Input channel should be 1 or 2")
+        
         if verbose:
             vprint = print
         else:
@@ -89,36 +95,17 @@ class RPIQA:
                 vprint(
                     f"RAM disk '{self.RAM_DISK_PATH}' created successfully.")
 
-        # Move source files
-        files_to_move = ["acquire.c", "configure.c", "Makefile"]
+        # Move executable files
+        files_to_move = ["acquire", "configure"]
 
-        vprint("Transfering files...")
+        vprint("Transfering executable files...")
         for filename in files_to_move:
             self.sftp.put(os.path.join(PACKAGE_ROOT, "rp_src", filename),
-                          self.RAM_DISK_PATH+"/"+filename)
+                        self.RAM_DISK_PATH+"/"+filename)
+            self.ssh.exec_command(f"chmod u+x {self.RAM_DISK_PATH}"+"/"+filename)
             vprint(f"Transferred {filename}")
 
-        vprint("Installing gcc and make")
-        stdin, stdout, stderr = self.ssh.exec_command("apk add gcc make")
-        for line in stderr.readlines():
-            vprint(line)
-        vprint("Output:")
-        for line in stdout.readlines():
-            vprint(line)
-
-        vprint(
-            "Compiling executables... Following is the output of the 'make all' command")
-
-        stdin, stdout, stderr = self.ssh.exec_command(
-            f"cd {self.RAM_DISK_PATH} && make")
-        vprint("Error(s):")
-        for line in stderr.readlines():
-            vprint(line)
-        vprint("Output:")
-        for line in stdout.readlines():
-            vprint(line)
-
-        # Once everything is setup, configure the default values
+        # Once everything is set up, configure some default values
         self._rate = self.SAMPLE_RATE_250KSPS
         self._mod_freq = 1e6
         self.update_configuration()
@@ -128,7 +115,7 @@ class RPIQA:
         Updates the hardware implementation running on the Red Pitaya with the set modulation frequency and sample rate
         """
         self.ssh.exec_command(
-            f"cd {self.RAM_DISK_PATH} && ./configure 1 {self._mod_freq} {self._rate}")
+            f"cd {self.RAM_DISK_PATH} && ./configure {self.input_channel} {self._mod_freq} {self._rate}")
 
     def set_modulation_frequency(self, mod_freq: float):
         """
@@ -141,7 +128,7 @@ class RPIQA:
     def set_sample_rate(self, sample_rate: int):
         """
         Sets the sample rate.
-        :param sample_rate: one of the defined smaple rates, such as RPIQA.SAMPLE_RATE_50KSPS. Run print_available_sample_rates to check options.
+        :param sample_rate: one of the defined smaple rates, such as RPIQA.SAMPLE_RATE_50KSPS. Run `help(RPIQA)` to see options.
         """
         self._rate = sample_rate
         self.update_configuration()
@@ -157,7 +144,7 @@ class RPIQA:
             8 * duration * self.actual_samplerate[self._rate] / 16384)  # this is the size of the FIFO
         t0 = time.time()
         self.ssh.exec_command(
-            f"cd {self.RAM_DISK_PATH} && ./acquire 1 {number_of_fifos}")
+            f"cd {self.RAM_DISK_PATH} && ./acquire {self.input_channel} {number_of_fifos}")
         self.sleep(duration-(time.time()-t0))
 
         # Get raw data through sftp
@@ -185,17 +172,6 @@ class RPIQA:
         :returns: modulation frequency
         """
         return self._mod_freq
-
-    def print_available_sample_rates(self):
-        """
-        Prints list of available sample rates
-        """
-        print("""SAMPLE_RATE_50KSPS = 1250
-    SAMPLE_RATE_100KSPS = 625
-    SAMPLE_RATE_250KSPS = 250
-    SAMPLE_RATE_500KSPS = 125
-    SAMPLE_RATE_1250KSPS = 50
-              """)
 
     def close(self):
         """
