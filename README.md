@@ -1,6 +1,11 @@
 # Red Pitaya IQ Acquisition (RPIQA)
 Use a [Red Pitaya FPGA board](https://redpitaya.com/) to acquire long continuous time traces of IQ-demodulated signals.
-A simple straight-forward Python API is provided to configure the acquisition and transfer data from the board to another computer.
+
+## Features
+* Demodulation at custom frequencies, from DC up to 62.5MHz. 
+* Sample rates down to 50 kSa/s and up to 1.25MSa/s have been tested.
+* Simple straight-forward Python API is provided to configure the acquisition and transfer data from the board to another computer.
+
 # What does it do?
 * An analog signal arriving at the board is digitized at 125MSa/s.
 * The now digital signal is demodulated at a user-set frequency using the CORDIC method.
