@@ -4,7 +4,7 @@ This file is only relevant for developers.
 This Python script compiles the C source code of the programs
 that run on the Red Pitaya on the Red Pitaya itself
 
-It should be run everytime changes are made to the acquire.c and configure.c files.
+It should be ran everytime changes are made to the acquire.c and configure.c files.
 """
 import paramiko
 import os
