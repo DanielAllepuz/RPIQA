@@ -5,9 +5,22 @@ import numpy as np
 import struct
 import time
 
+PACKAGE_ROOT = os.path.dirname(__file__)
+
+def print_C_sources():
+    print(__file__)
+    files_to_move = ["acquire.c", "configure.c", "Makefile"]
+
+    for filename in files_to_move:
+        print(f"{filename}:" + "~"*12)
+        with open(os.path.join(PACKAGE_ROOT, "rp_src", filename), "r") as f:
+            print(f.read(-1))
+        print("~"*12)
 
 class RPIQA:
-
+    """
+    API to configure system and acquire data.
+    """
     SAMPLE_RATE_50KSPS = 1250
     SAMPLE_RATE_100KSPS = 625
     SAMPLE_RATE_250KSPS = 250
@@ -18,6 +31,7 @@ class RPIQA:
                          SAMPLE_RATE_250KSPS: 250e3, SAMPLE_RATE_500KSPS: 500e3, SAMPLE_RATE_1250KSPS: 1250e3}
 
     RAM_DISK_PATH = "/mnt/RPIQA"
+
 
     def __init__(self, rp_address: str, username: str = "root", password: str = "changeme", verbose: bool = False, sleep_function=time.sleep):
         """
@@ -80,7 +94,7 @@ class RPIQA:
 
         vprint("Transfering files...")
         for filename in files_to_move:
-            self.sftp.put(os.path.join("rp_src", filename),
+            self.sftp.put(os.path.join(PACKAGE_ROOT, "rp_src", filename),
                           self.RAM_DISK_PATH+"/"+filename)
             vprint(f"Transferred {filename}")
 

@@ -1,0 +1,24 @@
+[project]
+name = "pyrpiqa"
+version = "0.1"
+authors = [
+  { name="Daniel Allepuz-Requena", email="daniel.allepuz@gmail.com" },
+]
+description = "RPIQA: Use a Red Pitaya board to acquire long continuous traces of IQ-demodulated signals "
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = ["numpy", "paramiko"]
+
+[project.urls]
+Homepage = "https://github.com/DanielAllepuz/RPIQA"
+Issues = "https://github.com/DanielAllepuz/RPIQA/issues"
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
